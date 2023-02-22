@@ -2,17 +2,20 @@
 #[path = "state_test.rs"]
 mod state_test;
 
-use std::collections::HashMap;
-use std::fmt::Debug;
-use std::mem;
-
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 
+use crate::api_core::{
+    ClassHash, ContractAddress, EntryPointSelector, GlobalRoot, Nonce, PatriciaKey,
+};
 use crate::block::{BlockHash, BlockNumber};
-use crate::core::{ClassHash, ContractAddress, EntryPointSelector, GlobalRoot, Nonce, PatriciaKey};
 use crate::hash::{StarkFelt, StarkHash};
 use crate::serde_utils::bytes_from_hex_str;
+use crate::stdlib::collections::HashMap;
+use crate::stdlib::fmt::Debug;
+use crate::stdlib::mem;
+use crate::stdlib::string::String;
+use crate::stdlib::vec::Vec;
 use crate::StarknetApiError;
 
 /// The differences between two states before and after a block with hash block_hash
