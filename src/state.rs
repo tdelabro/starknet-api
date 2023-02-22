@@ -2,19 +2,25 @@
 #[path = "state_test.rs"]
 mod state_test;
 
-use std::collections::HashMap;
-use std::fmt::Debug;
+#[cfg(feature = "std")]
+use std::collections::hash_map::RandomState as HasherBuilder;
 
+#[cfg(not(feature = "std"))]
+use hashbrown::hash_map::DefaultHashBuilder as HasherBuilder;
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 
-use crate::block::{BlockHash, BlockNumber};
-use crate::core::{
+use crate::api_core::{
     ClassHash, CompiledClassHash, ContractAddress, EntryPointSelector, GlobalRoot, Nonce,
     PatriciaKey,
 };
+use crate::block::{BlockHash, BlockNumber};
 use crate::deprecated_contract_class::ContractClass as DeprecatedContractClass;
 use crate::hash::{StarkFelt, StarkHash};
+use crate::stdlib::collections::HashMap;
+use crate::stdlib::fmt::Debug;
+use crate::stdlib::string::String;
+use crate::stdlib::vec::Vec;
 use crate::StarknetApiError;
 
 /// The differences between two states before and after a block with hash block_hash
@@ -33,12 +39,13 @@ pub struct StateUpdate {
 // TODO(yair): Enforce this invariant.
 #[derive(Debug, Default, Clone, Eq, PartialEq, Deserialize, Serialize)]
 pub struct StateDiff {
-    pub deployed_contracts: IndexMap<ContractAddress, ClassHash>,
-    pub storage_diffs: IndexMap<ContractAddress, IndexMap<StorageKey, StarkFelt>>,
-    pub declared_classes: IndexMap<ClassHash, (CompiledClassHash, ContractClass)>,
-    pub deprecated_declared_classes: IndexMap<ClassHash, DeprecatedContractClass>,
-    pub nonces: IndexMap<ContractAddress, Nonce>,
-    pub replaced_classes: IndexMap<ContractAddress, ClassHash>,
+    pub deployed_contracts: IndexMap<ContractAddress, ClassHash, HasherBuilder>,
+    pub storage_diffs:
+        IndexMap<ContractAddress, IndexMap<StorageKey, StarkFelt, HasherBuilder>, HasherBuilder>,
+    pub declared_classes: IndexMap<ClassHash, (CompiledClassHash, ContractClass), HasherBuilder>,
+    pub deprecated_declared_classes: IndexMap<ClassHash, DeprecatedContractClass, HasherBuilder>,
+    pub nonces: IndexMap<ContractAddress, Nonce, HasherBuilder>,
+    pub replaced_classes: IndexMap<ContractAddress, ClassHash, HasherBuilder>,
 }
 
 /// The sequential numbering of the states between blocks.

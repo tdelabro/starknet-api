@@ -1,10 +1,11 @@
-use std::collections::HashMap;
-
 use serde::de::Error as DeserializationError;
 use serde::{Deserialize, Deserializer, Serialize};
 use serde_json::Value;
 
-use crate::core::EntryPointSelector;
+use crate::api_core::EntryPointSelector;
+use crate::stdlib::collections::HashMap;
+use crate::stdlib::string::String;
+use crate::stdlib::vec::Vec;
 use crate::StarknetApiError;
 
 /// A deprecated contract class.
@@ -156,6 +157,6 @@ pub fn number_or_string<'de, D: Deserializer<'de>>(deserializer: D) -> Result<us
     Ok(usize_value)
 }
 
-fn hex_string_try_into_usize(hex_string: &str) -> Result<usize, std::num::ParseIntError> {
+fn hex_string_try_into_usize(hex_string: &str) -> Result<usize, crate::stdlib::num::ParseIntError> {
     usize::from_str_radix(hex_string.trim_start_matches("0x"), 16)
 }
