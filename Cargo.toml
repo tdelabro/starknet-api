@@ -23,7 +23,7 @@ serde = { version = "1.0.130", features = [
 serde_json = { version = "1.0.81", default-features = false, features = [
     "alloc",
 ] }
-starknet-crypto = { version = "0.3.0", default-features = false }
+starknet-crypto = { version = "0.4.2", default-features = false }
 derive_more = { version = "0.99.17", default-features = false, features = [
     "display",
 ] }
